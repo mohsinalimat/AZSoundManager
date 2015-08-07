@@ -1,6 +1,6 @@
 ##Intro
 
-![AZSoundManager](Screenshots/demo.png =225x400)
+![AZSoundManager](Screenshots/demo.png)
 
 
 AZSoundManager is a simple tool for playing sound and music in iOS apps.
