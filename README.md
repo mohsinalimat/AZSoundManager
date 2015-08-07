@@ -7,7 +7,8 @@ AZSoundManager is a simple tool for playing sound and music in iOS apps.
 
 ##Installation
 
-To use the AZSoundManager class in an app:
+To use the AZSoundManager:
+
 1. Just drag the class files into your project:
 
     AZSoundManager.h
