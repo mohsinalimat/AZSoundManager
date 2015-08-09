@@ -85,19 +85,23 @@
         self.progressBlock(self.currentItem);
     }
     
-    NSTimeInterval currentTime = CMTimeGetSeconds(self.player.currentItem.asset.duration);
-    NSTimeInterval duration = CMTimeGetSeconds(self.player.currentItem.currentTime);
+    NSInteger currentTime = CMTimeGetSeconds(self.player.currentItem.asset.duration);
+    NSInteger duration = CMTimeGetSeconds(self.player.currentItem.currentTime);
     
     if (currentTime == duration)
     {
-        [self stopTimer];
+        [self.player pause];
         self.status = AZSoundStatusFinished;
-        [self.player seekToTime:CMTimeMake(0, 1)];
         
-        if (self.completionBlock)
-        {
-            self.completionBlock();
-        }
+        [self stopTimer];
+        
+        [self.player seekToTime:CMTimeMake(0, 1) completionHandler:^(BOOL finished) {
+            [self.currentItem updateInfo:self.player.currentItem];
+            if (self.completionBlock)
+            {
+                self.completionBlock();
+            }
+        }];
     }
 }
 
@@ -118,37 +122,34 @@
 
 - (void)play
 {
-    if (self.player)
-    {
-        [self.player play];
-        self.status = AZSoundStatusPlaying;
-        
-        [self startTimer];
-    }
+    if (!self.player) return;
+    
+    [self.player play];
+    self.status = AZSoundStatusPlaying;
+    
+    [self startTimer];
 }
 
 - (void)pause
 {
-    if (self.player)
-    {
-        [self.player pause];
-        self.status = AZSoundStatusPaused;
-        
-        [self stopTimer];
-    }
+    if (!self.player) return;
+    
+    [self.player pause];
+    self.status = AZSoundStatusPaused;
+    
+    [self stopTimer];
 }
 
 - (void)stop
 {
-    if (self.player)
-    {
-        [self.player pause];
-        self.player = nil;
-        self.currentItem = nil;
-        self.status = AZSoundStatusNotStarted;
-        
-        [self stopTimer];
-    }
+    if (!self.player) return;
+    
+    [self.player pause];
+    self.player = nil;
+    self.currentItem = nil;
+    self.status = AZSoundStatusNotStarted;
+    
+    [self stopTimer];
 }
 
 - (void)restart
@@ -156,13 +157,17 @@
     [self playAtSecond:0];
 }
 
-- (void)playAtSecond:(NSTimeInterval)second
+- (void)playAtSecond:(NSInteger)second
 {
-    if (self.player)
-    {
-        [self.player seekToTime:CMTimeMake(second, 1)];
-        [self play];
-    }
+    [self rewindToSecond:second];
+    [self play];
+}
+
+- (void)rewindToSecond:(NSInteger)second
+{
+    if (!self.player) return;
+
+    [self.player seekToTime:CMTimeMake(second, 1)];
 }
 
 - (void)getItemInfoWithProgressBlock:(progressBlock)progressBlock

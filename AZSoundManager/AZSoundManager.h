@@ -1,14 +1,14 @@
 //
 //  AZSoundManager.h
 //
-//  Version 1.0
+//  Version 1.0.1
 //
 //  Created by Aleksey Zunov on 06.08.15.
 //  Copyright (c) 2015 aleksey.zunov@gmail.com. All rights reserved.
 //
 //  Get the latest version from here:
 //
-//  https://github.com/
+//  https://github.com/willingheart/AZSoundManager
 //
 //  This software is provided 'as-is', without any express or implied
 //  warranty. In no event will the authors be held liable for any damages
@@ -58,7 +58,8 @@ typedef NS_ENUM(NSInteger, AZSoundStatus)
 - (void)pause;
 - (void)stop;
 - (void)restart;
-- (void)playAtSecond:(NSTimeInterval)second;
+- (void)playAtSecond:(NSInteger)second;
+- (void)rewindToSecond:(NSInteger)second;
 
 - (void)getItemInfoWithProgressBlock:(progressBlock)progressBlock
                      completionBlock:(completionBlock)completionBlock;
